@@ -3,15 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build-server": "tsc",
-    "dev-server": "nodemon --exec ts-node --transpile-only src/server.ts",
-    "start-server": "node dist/server.js"
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "ts-node-dev src/server.ts"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/express": "^5.0.0",
-    "@types/node": "^22.7.8",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
@@ -22,14 +20,14 @@
     "nodemon": "^3.1.7",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.3",
-    "zod": "^3.23.8",
-    "@types/bcrypt": "^5.0.2",
-    "@types/cors": "^2.8.17",
-    "@types/express": "^5.0.0",
-    "@types/node": "^22.7.4",
-    "@types/nodemailer": "^6.4.16",
-    "typescript": "^5.6.2"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^22.15.30",
+    "@types/nodemailer": "^6.4.16",
+    "typescript": "^5.6.2"
   }
 }
