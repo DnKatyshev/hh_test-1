@@ -14,13 +14,6 @@ export function SortableList({ rows, lastRowRef }) {
   const columns = [
     {
       formatter: (row) => (
-        <Typography variant="body2" sx={{fontWeight: "700", color: '#fff'}}>{row.id}</Typography>
-      ),
-      name: 'ID',
-      align: 'left'
-    },
-    {
-      formatter: (row) => (
         <Typography variant="body2" sx={{fontWeight: "700", color: '#fff'}}>{row.number}</Typography>
       ),
       name: 'Номер',

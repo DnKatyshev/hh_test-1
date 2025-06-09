@@ -22,13 +22,12 @@ class DataController {
   async searchByNumber(req: Request, res: Response) {
     try {
       const number = req.query.number as string;
-
-      const data = await dataService.searchByNumber(number);
-
+      const chunk = parseInt(req.query.chunk as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 20;
+  
+      const data = await dataService.searchByNumber(number, chunk, limit);
       res.status(200).json(data);
-    } 
-    
-    catch (error) {
+    } catch (error) {
       res.status(500).json({ message: "Search error", error });
     }
   }

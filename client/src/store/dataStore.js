@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import { getData } from '@/actions/data/getData';
+import { getData, searchByNumber } from '@/actions/data/getData';
 
 
 const useDataStore = create( persist( (set, get) => ({
@@ -12,6 +12,8 @@ const useDataStore = create( persist( (set, get) => ({
   searchingStop: false,
   actionCheckboxes: [],
   sortOrder: null,
+  searchValue: '',
+  searchChunk: 1,
 
 
   setData: (key, value) => set((state) => ({ 
@@ -36,28 +38,51 @@ const useDataStore = create( persist( (set, get) => ({
 
 
   loadMoreData: async () => {
-    const { currentChunk, hasMore, loading, data, searchingStop, sortOrder } = get();
-    
-    if (loading || !hasMore || searchingStop) return;
-    
+    const {
+      currentChunk,
+      hasMore,
+      loading,
+      data,
+      searchingStop,
+      sortOrder,
+      searchValue,
+      searchChunk,
+    } = get();
+  
+    if (loading || !hasMore) return;
+  
     set({ loading: true });
-    
+  
     try {
-      const response = await getData(currentChunk, 20);
-      const newData = response.response || [];
-      
-      if (newData.length === 0) {
-        set({ hasMore: false });
-      } else {
+      let response;
+      let newData = [];
+  
+      if (searchingStop && searchValue !== '') {
+        // Поиск по номеру
+        response = await searchByNumber(searchValue, searchChunk, 20);
+        newData = response.response || [];
+  
         set({
-          data: { 
-            test_data: currentChunk === 1 && !sortOrder ? newData : [...data.test_data, ...newData] 
+          data: {
+            test_data: [...data.test_data, ...newData],
+          },
+          searchChunk: searchChunk + 1,
+        });
+      } else {
+        // Обычная загрузка
+        response = await getData(currentChunk, 20);
+        newData = response.response || [];
+  
+        set({
+          data: {
+            test_data: [...data.test_data, ...newData],
           },
           currentChunk: currentChunk + 1,
-
-          // не сбрасываем sortOrder при подгрузке
-          sortOrder: sortOrder 
         });
+      }
+  
+      if (newData.length < 20) {
+        set({ hasMore: false });
       }
     } 
     
@@ -69,6 +94,9 @@ const useDataStore = create( persist( (set, get) => ({
       set({ loading: false });
     }
   },
+
+  setSearchValue: (value) => set({ searchValue: value }),
+  setSearchChunk: (chunk) => set({ searchChunk: chunk }),
 
 }),
 

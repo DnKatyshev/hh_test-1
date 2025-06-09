@@ -15,19 +15,24 @@ export function DataList() {
   }, []);
 
   const lastRowRef = (node) => {
-    if (!node || loading || !hasMore || searchingStop) return;
-    
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        loadMoreData();
-      }
-    }, {
-      threshold: 0.1 // Срабатывает при 10% видимости элемента
-    });
-    
+    if (!node || loading || !hasMore) return;
+  
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadMoreData();
+        }
+      },
+      { threshold: 0.1 }
+    );
+  
     observer.observe(node);
+  
     return () => observer.disconnect();
   };
+  
+
+  console.log('===DATA===', data);
 
 
   return (

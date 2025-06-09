@@ -20,9 +20,11 @@ export const getData = async (chunk, limit) => {
 };
   
 
-export const searchByNumber = async (number) => {
+export const searchByNumber = async (number, chunk = 1, limit = 20) => {
   try {
-    const request = await fetch(`${BASE_URL}/search-by-number?number=${number}`);
+    const request = await fetch(
+      `${BASE_URL}/search-by-number?number=${number}&chunk=${chunk}&limit=${limit}`
+    );
 
     if (!request.ok) {
       return { status: request.status };

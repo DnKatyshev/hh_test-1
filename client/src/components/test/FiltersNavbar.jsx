@@ -12,32 +12,39 @@ export function FiltersNavbar() {
     setCurrentChunk,
     setHasMore,
     loadMoreData,
+    setSearchValue,
+    setSearchChunk
   } = useDataStore();
 
   const [value, setValue] = useState('');
 
   const handleSearch = async (searchValue) => {
+    setSearchValue(searchValue);
     setCurrentChunk(1);
-
+    setSearchChunk(1);
+  
     if (searchValue.trim() === '') {
       setSearchingStop(false);
       setHasMore(true);
       setData('test_data', []);
-      await loadMoreData(); // загрузка первых данных
+      await loadMoreData(); // обычная загрузка
       return;
     }
-
+  
     setLoading(true);
     setSearchingStop(true);
-
-    const { status, response } = await searchByNumber(searchValue);
-    
+  
+    const { status, response } = await searchByNumber(searchValue, 1);
+  
     if (status === 200) {
       setData('test_data', response || []);
+      setHasMore((response || []).length === 20); // если есть ещё
+      setSearchChunk(2);
     } else {
       setData('test_data', []);
+      setHasMore(false);
     }
-
+  
     setLoading(false);
   };
 
